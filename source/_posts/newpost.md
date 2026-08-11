@@ -9,7 +9,7 @@ poster:
   color: white
 date: 2026-08-11 23:04:35
 description:
-cover: https://cdn.jsdmirror.com/gh/omo-ri/omo-ri.github.io/source/assets/images/avatar.jpg
+# cover: https://cdn.jsdmirror.com/gh/omo-ri/omo-ri.github.io/source/assets/images/avatar.jpg
 banner: https://cdn.jsdmirror.com/gh/omo-ri/omo-ri.github.io/source/assets/images/avatar.jpg
 sticky:
 mermaid:

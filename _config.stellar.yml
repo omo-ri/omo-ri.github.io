@@ -118,9 +118,9 @@ style:
   error_page: https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/404/1c830bfcd517d.svg
   site: # 使用 background-image 后，blur 设置才有效
     background-image: url(https://cdn.jsdmirror.com/gh/omo-ri/omo-ri.github.io/source/assets/images/bg.jpg)
-    blur-px: 6px
-    blur-bg: var(--bg-a50)
-    blur-sat: 150%
+    blur-px: 0px
+    blur-bg: var(--bg-a30)
+    blur-sat: 100%
   # 技术文章内页各级标题前面的符号
   header_prefix:
     h2: '#'
