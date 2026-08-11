@@ -119,7 +119,7 @@ style:
   site: # 使用 background-image 后，blur 设置才有效
     background-image: url(https://cdn.jsdmirror.com/gh/omo-ri/omo-ri.github.io/source/assets/images/bg.jpg)
     blur-px: 0px
-    blur-bg: var(--bg-a30)
+    # blur-bg: var(--bg-a30)
     blur-sat: 100%
   # 技术文章内页各级标题前面的符号
   header_prefix:
