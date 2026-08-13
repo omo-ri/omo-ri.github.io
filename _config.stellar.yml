@@ -67,7 +67,7 @@ article:
 
 
 style:
-  prefers_theme: auto # auto / light / dark
+  prefers_theme: dark # auto / light / dark
   smooth_scroll: true # true / false 开启时如果目录过长可能无法准确定位
   font-size:
     root: 16px # 改这个会影响全局所有文字的字号
@@ -75,7 +75,7 @@ style:
     code: 85% # 相较于其所在行的文本大小，建议用百分比
     codeblock: 0.8125rem # 13px
   font-family:
-    body: 'system-ui, "Microsoft Yahei", "Segoe UI", Arial, sans-serif'
+    body: '"LXGW WenKai Screen", system-ui, "Microsoft Yahei", "Segoe UI", Arial, sans-serif'
     code: 'Menlo, Monaco, Consolas, system-ui, monospace, sans-serif'
     codeblock: 'Menlo, Monaco, Consolas, system-ui, monospace, sans-serif'
   text-align: left
@@ -127,3 +127,7 @@ style:
     h3: '='
     h4: '|'
     h5: ':'
+
+inject:
+  head:
+    - <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-screen-webfont@1.7.0/style.css">
