@@ -71,7 +71,7 @@ type:
 | --------------- | ------------------------------------------ | --------------------- |
 | Node.js         | v24.19.0                                   | 22 及以上（推荐 LTS） |
 | npm             | 11.17.0                                    | 10 及以上             |
-| CI 环境 Node.js | 24（GitHub Actions `actions/setup-node@v4`） | —                     |
+| CI 环境 Node.js | 24（GitHub Actions） | —                     |
 
 <!-- tab 框架与主题 -->
 
