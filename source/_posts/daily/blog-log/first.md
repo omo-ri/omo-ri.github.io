@@ -1,12 +1,7 @@
 ---
-title: 建站 Hexo + Stellar
+title: 建站
 tags: []
 categories: [日常]
-poster:
-  topic: null
-  headline: 大标题
-  caption: null
-  color: white
 date: 2026-08-13 13:30:28
 description: 
 cover:
@@ -49,7 +44,7 @@ type:
 
 现在目标是把这个博客整合到我的网站上，加个入口之类的。那个网站现在叫Vellum
 
-{% button color:theme Vellum https://vellum.mianhua.ru/ icon:solar:planet-bold-duotone %}
+{% button color:theme Vellum https://vellum.mianhua.ru/ icon:example:planet %}
 
 刚把vps还有github工作流搞好，但是感觉这么直接放到服务器上也没法监控。是不是还是得搞一下kubernetes啊...
 

@@ -19,22 +19,22 @@ menubar:
     # url: 点击跳转到哪，支持相对路径和绝对路径
     - id: post
       theme: '#1BCDFC'
-      icon: solar:planet-bold-duotone
+      icon: example:planet
       title: 博客
       url: /
     - id: about
       theme: '#3DC550'
-      icon: solar:documents-bold-duotone
+      icon: default:documents
       title: 关于
       url: /about/
     - id: notebooks
       theme: '#FA6400'
-      icon: solar:notebook-bookmark-bold-duotone
+      icon: example:notebook
       title: 笔记
       url: /notebooks/
     # - id: friends
     #   theme: '#F44336'
-    #   icon: solar:chat-square-like-bold-duotone
+    #   icon: example:chat
     #   title: 友链
     #   url: /friends/
 
@@ -48,8 +48,6 @@ article:
   cover_ratio: 2
   # 文章内横幅宽高比
   banner_ratio: 2.5
-  # 如果没有指定横幅，是否根据 tags 作为关键词搜索横幅图片？
-  auto_banner: false # search from https://source.unsplash.com/
   # 如果没有指定 excerpt 和 description，将自动取多长的内容作为文章摘要？
   auto_excerpt: 128
   # 分类颜色
@@ -64,6 +62,9 @@ article:
   related_posts:
     enable: false
     max_count: 5
+  # hero = 全图文字封面卡片（主题默认，有 cover 的文章渲染成整张封面图 + 标题压底部）
+  # classic = 普通卡片（封面 + 标题 + 摘要 + 日期/分类）
+  card_style: hero
 
 
 style:
@@ -131,3 +132,4 @@ style:
 inject:
   head:
     - <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-screen-webfont@1.7.0/style.css">
+    - <link rel="stylesheet" href="/css/custom.css">

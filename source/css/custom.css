@@ -1,0 +1,54 @@
+/* ===================================================================
+ * Stellar 1.41+ 首页文章卡片 hover 修正
+ *
+ * 背景：主题从 1.41 起在 source/css/_components/list.styl 里移除了
+ * .post-card-wrap 的 hoverable-card()，改用标题下方一根 12px 高、
+ * 50% 透明度的主题色横条（.post-title::after）作为唯一 hover 反馈。
+ * 该效果按拉丁文字的降部空白设计，中文方块字撑满 em 框，
+ * 横条会把字的下三分之一糊住，看起来像没渲染完。
+ *
+ * 本文件：去掉横条，恢复 1.38 的整卡 hover 反馈。
+ * 选择器统一多加一层 .l_main 提高特异性，不依赖 CSS 加载顺序。
+ * 删掉这个文件即可完全回到主题默认行为。
+ * =================================================================== */
+
+/* 1. 彻底去掉标题下的主题色横条 */
+.l_main .post-list .post-card .post-title::after {
+  display: none;
+}
+
+/* 顺带把标题盒子还原成 1.38 的整行块级（1.41 改成了 width: fit-content，
+   那是为了让横条宽度贴合文字才加的，横条没了就不需要） */
+.l_main .post-list .post-card .post-title {
+  width: auto;
+}
+
+/* 2. 恢复整卡 hover 反馈，对应 1.38 的 hoverable-card() */
+.l_main .post-list .post-card-wrap {
+  transition: box-shadow 0.2s ease-out;
+}
+
+/* 亮色：阴影加深 */
+:root[data-theme="light"] .l_main .post-list .post-card-wrap:hover {
+  box-shadow: 0 12px 20px -4px rgba(0, 0, 0, 0.15);
+}
+
+/* 暗色：主题色辉光 */
+:root[data-theme="dark"] .l_main .post-list .post-card-wrap:hover {
+  box-shadow: 0 0 4px -2px var(--theme), 0 0 24px -8px var(--theme);
+}
+
+/* 跟随系统配色时的兜底 */
+:root:not([data-theme]) .l_main .post-list .post-card-wrap:hover {
+  box-shadow: 0 12px 20px -4px rgba(0, 0, 0, 0.15);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) .l_main .post-list .post-card-wrap:hover {
+    box-shadow: 0 0 4px -2px var(--theme), 0 0 24px -8px var(--theme);
+  }
+}
+
+/* 3. 封面缩放动画改回 0.5s（1.41 拖长到了 1.5s，hover 时显得迟钝） */
+.l_main .post-list .post-card img {
+  transition: all 0.2s ease-out, transform 0.5s ease-out;
+}
