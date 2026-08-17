@@ -1,11 +1,11 @@
 ---
-title: 建站日志【3】
+title: 建站日志【3】 GitHub + PicGo 图床
 tags: [PicGo, 图床, GitHub]
 categories: [日常]
 date: 2026-08-17 00:02:42
 description:
 cover:
-subtitle: GitHub + PicGo 图床
+subtitle:
 banner:
 sticky:
 mermaid:

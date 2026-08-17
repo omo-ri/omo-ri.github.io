@@ -1,6 +1,6 @@
 ---
-title: 建站
-tags: []
+title: 建站日志【1】 搭建 Hexo + Stellar 博客 
+tags: [Hexo, Stellar, 博客]
 categories: [日常]
 date: 2026-08-13 13:30:28
 description: 
