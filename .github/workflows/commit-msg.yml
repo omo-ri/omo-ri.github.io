@@ -13,7 +13,7 @@ jobs:
   check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           # 必须拉全历史：脚本要计算 before..after 区间，
           # 默认的 fetch-depth: 1 下 before 对象不存在，git log 会直接报 bad object。
