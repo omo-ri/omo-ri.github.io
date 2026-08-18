@@ -57,6 +57,20 @@ style:
     blur-sat: 100% # 主题默认 300%
 
 
+######## Plugins ########
+# 主题的 layout/_plugins/index.ejs 里：某个 plugin 一旦配了 inject，
+# 就用 inject 的内容代替主题自带的 ejs partial。
+# 触发条件不变，仍然是文章 front-matter 里写 mathjax: true。
+plugins:
+  mathjax:
+    # 覆盖主题默认（MathJax 2.7.6 + matchFontHeight 默认开启）。
+    # matchFontHeight 会把公式缩放到与周围文字的 x-height 对齐，
+    # 而霞鹜文楷的 sxHeight 只有 468/2048 ≈ 0.23em（常见拉丁字体约 0.5em），
+    # 导致公式被压到 ~50%。关掉它，公式就按 1em 正常渲染。
+    inject:
+      - <script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$'],['\\[','\\]']],processEscapes:true},options:{skipHtmlTags:['script','noscript','style','textarea','pre','code']},chtml:{matchFontHeight:false}};</script><script id="MathJax-script" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js"></script>
+
+
 inject:
   head:
     - <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-screen-webfont@1.7.0/style.css">
