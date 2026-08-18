@@ -1,0 +1,25 @@
+name: Commit Message
+
+# 独立于 Pages 部署：提交信息不规范只报警，不阻断站点上线。
+on:
+  push:
+    branches:
+      - "**"
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # 必须拉全历史：脚本要计算 before..after 区间，
+          # 默认的 fetch-depth: 1 下 before 对象不存在，git log 会直接报 bad object。
+          fetch-depth: 0
+      - name: 检查提交信息
+        env:
+          BEFORE_SHA: ${{ github.event.before }}
+          AFTER_SHA: ${{ github.event.after }}
+        run: node ci/check-commit-msg.js "$BEFORE_SHA" "$AFTER_SHA"
