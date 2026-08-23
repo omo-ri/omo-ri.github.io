@@ -52,3 +52,93 @@
 .l_main .post-list .post-card img {
   transition: all 0.2s ease-out, transform 0.5s ease-out;
 }
+
+
+/* ===================================================================
+ * Mermaid 时序图配色修正
+ *
+ * 背景：主题的 mermaid 主题是 neutral（全灰阶），消息文字和消息线都是
+ * #333，而本站正文区是半透明背景图，深灰画在上面几乎看不清；主题自带的
+ * css/plugins/mermaid.css 只覆盖了流程图（node/edge/cluster），
+ * 时序图的 actor / note / messageText 一个都没管。
+ *
+ * 本文件：把时序图的颜色全部换成站点 CSS 变量，明暗两套配色自动跟随。
+ * 变量来自主题 _defines/theme_base.styl：
+ *   --theme / --theme-a10..a30 主题色，--text-p1..p4 正文文字四档透明度，
+ *   --block / --block-border 块级底色与描边，--card 卡片底色。
+ * =================================================================== */
+
+/* 图整体：套一层磨砂面板，挡住正文区背后的背景图，文字才有干净的底 */
+pre.mermaid {
+  padding: 16px 8px;
+  border: 1px solid var(--block-border);
+  border-radius: 8px;
+  background: var(--block);
+  backdrop-filter: blur(16px) saturate(50%) brightness(1.75);
+  -webkit-backdrop-filter: blur(16px) saturate(50%) brightness(1.75);
+}
+
+/* 暗色下把背后的背景图压暗，白字才压得住（亮色反之，见上面的默认值） */
+:root[data-theme="dark"] pre.mermaid {
+  backdrop-filter: blur(16px) saturate(80%) brightness(0.55);
+  -webkit-backdrop-filter: blur(16px) saturate(80%) brightness(0.55);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) pre.mermaid {
+    backdrop-filter: blur(16px) saturate(80%) brightness(0.55);
+    -webkit-backdrop-filter: blur(16px) saturate(80%) brightness(0.55);
+  }
+}
+
+/* 文字：actor 名、消息文字、note 文字、loop 标签，统一用正文色 */
+.mermaid text,
+.mermaid text tspan,
+.mermaid .messageText,
+.mermaid .noteText,
+.mermaid .noteText tspan,
+.mermaid .labelText,
+.mermaid .labelText tspan,
+.mermaid .loopText,
+.mermaid .loopText tspan,zuo
+/* 参与者方框：卡片底 + 主题色描边 */
+.mermaid rect.actor,
+.mermaid .actor-top,
+.mermaid .actor-bottom {
+  fill: var(--block) !important;
+  stroke: var(--theme) !important;
+}
+
+/* 参与者生命线：淡一档，别抢戏 */
+.mermaid line.actor-line {
+  stroke: var(--text-p4) !important;
+}
+
+/* 消息线与箭头：主题色，深色背景下也够亮 */
+.mermaid .messageLine0,
+.mermaid .messageLine1 {
+  stroke: var(--theme) !important;
+}
+
+.mermaid marker path,
+.mermaid marker circle,
+.mermaid #arrowhead path {
+  fill: var(--theme) !important;
+  stroke: var(--theme) !important;
+}
+
+/* Note（状态标注）：主题色浅底 + 主题色描边 */
+.mermaid rect.note {
+  fill: var(--theme-a20) !important;
+  stroke: var(--theme) !important;
+}
+
+/* loop / alt / opt 分组框 */
+.mermaid .labelBox {
+  fill: var(--block) !important;
+  stroke: var(--theme) !important;
+}
+
+.mermaid .loopLine {
+  stroke: var(--theme) !important;
+}
