@@ -1,0 +1,383 @@
+/* ===================================================================
+ * 浮点数文章（floating-point-01）的配图和交互组件
+ *
+ * 只在这篇文章里引入，所有选择器挂在 .fpv 下，不影响主题。
+ * 占位写法：<div class="fpv" data-fig="bits"></div>，由 /js/float-viz.js 渲染。
+ * =================================================================== */
+
+/* 亮色（默认） */
+.fpv {
+  --fpv-text: var(--text-p1, rgba(0, 0, 0, 0.85));
+  --fpv-p2: var(--text-p2, rgba(0, 0, 0, 0.68));
+  --fpv-p3: var(--text-p3, rgba(0, 0, 0, 0.58));
+  --fpv-block: var(--block, rgba(20, 50, 60, 0.04));
+  --fpv-border: var(--block-border, rgba(20, 50, 60, 0.10));
+
+  --fpv-line: rgba(0, 0, 0, 0.24);
+  --fpv-inner: rgba(20, 50, 60, 0.04);
+  --fpv-inner-border: rgba(20, 50, 60, 0.10);
+  --fpv-cyan: var(--theme, #1ccffd);
+  --fpv-cyan-a: rgba(28, 207, 253, 0.22);
+  --fpv-cyan-text: #047a9a;
+  --fpv-accent: #ff5f24;
+  --fpv-accent-text: #c2410c;
+  --fpv-ok: #2e7d32;
+  --fpv-ok-a: rgba(46, 125, 50, 0.14);
+  --fpv-bad: #d32f2f;
+  --fpv-bad-a: rgba(211, 47, 47, 0.24);
+  --fpv-sign: #7e57c2;
+  --fpv-exp: #43a047;
+  --fpv-man: #1e88e5;
+}
+.fpv[data-fig="round"],
+.fpv[data-fig="widget"] {
+  --fpv-ok-a: rgba(46, 125, 50, 0.12);
+}
+.fpv[data-fig="widget"] {
+  --fpv-bad-a: rgba(211, 47, 47, 0.18);
+}
+
+/* 暗色 */
+:root[data-theme="dark"] .fpv {
+  --fpv-line: rgba(255, 255, 255, 0.24);
+  --fpv-inner: rgba(255, 255, 255, 0.05);
+  --fpv-inner-border: rgba(255, 255, 255, 0.10);
+  --fpv-cyan-a: rgba(28, 207, 253, 0.20);
+  --fpv-cyan-text: #5ddcfd;
+  --fpv-accent: #ff6b3d;
+  --fpv-accent-text: #ff8a65;
+  --fpv-ok: #6fcf73;
+  --fpv-ok-a: rgba(111, 207, 115, 0.16);
+  --fpv-bad: #ff6b6b;
+  --fpv-bad-a: rgba(255, 107, 107, 0.30);
+  --fpv-sign: #b39ddb;
+  --fpv-exp: #81c784;
+  --fpv-man: #64b5f6;
+}
+:root[data-theme="dark"] .fpv[data-fig="round"] {
+  --fpv-ok-a: rgba(111, 207, 115, 0.14);
+}
+:root[data-theme="dark"] .fpv[data-fig="widget"] {
+  --fpv-bad-a: rgba(255, 107, 107, 0.26);
+}
+
+/* 跟随系统配色时的暗色 */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) .fpv {
+    --fpv-line: rgba(255, 255, 255, 0.24);
+    --fpv-inner: rgba(255, 255, 255, 0.05);
+    --fpv-inner-border: rgba(255, 255, 255, 0.10);
+    --fpv-cyan-a: rgba(28, 207, 253, 0.20);
+    --fpv-cyan-text: #5ddcfd;
+    --fpv-accent: #ff6b3d;
+    --fpv-accent-text: #ff8a65;
+    --fpv-ok: #6fcf73;
+    --fpv-ok-a: rgba(111, 207, 115, 0.16);
+    --fpv-bad: #ff6b6b;
+    --fpv-bad-a: rgba(255, 107, 107, 0.30);
+    --fpv-sign: #b39ddb;
+    --fpv-exp: #81c784;
+    --fpv-man: #64b5f6;
+  }
+  :root:not([data-theme]) .fpv[data-fig="round"] {
+    --fpv-ok-a: rgba(111, 207, 115, 0.14);
+  }
+  :root:not([data-theme]) .fpv[data-fig="widget"] {
+    --fpv-bad-a: rgba(255, 107, 107, 0.26);
+  }
+}
+
+/* ---------- 容器 ---------- */
+.fpv {
+  position: relative;
+  display: block;
+  margin: 1.5rem 0;
+  border-radius: 12px;
+  background: var(--fpv-block);
+  color: var(--fpv-text);
+  line-height: 1.4;
+}
+.fpv:empty {
+  display: none;
+}
+.fpv-body {
+  box-sizing: border-box;
+  padding: 28px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.fpv .mono,
+.fpv input,
+.fpv button {
+  font-family: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+}
+.fpv sup {
+  font-size: 0.7em;
+  line-height: 0;
+}
+.fpv-caption {
+  font-size: 13px;
+  color: var(--fpv-p3);
+}
+
+/* 数轴区域：里面全是绝对定位的小块 */
+.fpv-axis {
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.fpv-axis > * {
+  position: absolute;
+  box-sizing: border-box;
+}
+.fpv-axis .fpv-label {
+  white-space: nowrap;
+  font-size: 13px;
+}
+.fpv-axis .fpv-center {
+  transform: translateX(-50%);
+}
+
+/* 图例 */
+.fpv-legend {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 24px;
+  row-gap: 8px;
+  font-size: 13px;
+  color: var(--fpv-p2);
+}
+.fpv.is-narrow .fpv-legend {
+  flex-direction: column;
+}
+.fpv-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.fpv-legend-item > span:first-child {
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+
+/* ---------- 图 1 位布局 ---------- */
+.fpv-bits {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.fpv-bits-row {
+  display: flex;
+  align-items: flex-start;
+  column-gap: 16px;
+  row-gap: 6px;
+}
+.fpv.is-narrow .fpv-bits-row {
+  flex-direction: column;
+}
+.fpv-bits-name {
+  width: 76px;
+  font-size: 15px;
+  line-height: 28px;
+}
+.fpv.is-narrow .fpv-bits-name {
+  line-height: 20px;
+}
+.fpv-bits-segs {
+  display: flex;
+  gap: 5px;
+}
+.fpv.is-narrow .fpv-bits-segs {
+  gap: 3px;
+}
+.fpv-seg {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+}
+.fpv-cells {
+  display: flex;
+  gap: 1px;
+}
+.fpv-cells > span {
+  width: 8px;
+  height: 28px;
+  border-radius: 1px;
+}
+.fpv.is-narrow .fpv-cells > span {
+  width: 3px;
+}
+
+/* ---------- 交互组件 ---------- */
+.fpv-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.fpv-presets {
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.fpv .fpv-row > label,
+.fpv-presets > span {
+  flex-shrink: 0;
+  width: 40px;
+  font-size: 16px;
+}
+.fpv-presets > span {
+  font-size: 14px;
+  color: var(--fpv-p3);
+}
+.fpv input.fpv-input {
+  width: 240px;
+  min-width: 0;
+  height: 44px;
+  margin: 0;
+  box-sizing: border-box;
+  padding: 0 14px;
+  font-size: 18px;
+  line-height: normal;
+  border-radius: 8px;
+  border: 1px solid var(--fpv-line);
+  background: var(--fpv-inner);
+  color: var(--fpv-text);
+  box-shadow: none;
+}
+.fpv.is-narrow input.fpv-input {
+  flex: 1;
+  width: auto;
+}
+.fpv input.fpv-input:focus {
+  outline: 2px solid var(--fpv-cyan);
+  outline-offset: 1px;
+}
+.fpv button.fpv-preset {
+  height: 44px;
+  min-height: 44px;
+  margin: 0;
+  padding: 0 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  line-height: normal;
+  cursor: pointer;
+  background: transparent;
+  border: 1px solid var(--fpv-line);
+  color: var(--fpv-p2);
+  box-shadow: none;
+}
+.fpv button.fpv-preset.is-active {
+  background: var(--fpv-cyan-a);
+  border-color: var(--fpv-cyan);
+  color: var(--fpv-text);
+}
+.fpv-err {
+  font-size: 14px;
+  color: var(--fpv-bad);
+}
+.fpv-result {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.fpv-result:empty {
+  display: none;
+}
+.fpv-panel {
+  padding: 16px;
+  border-radius: 10px;
+  background: var(--fpv-inner);
+  border: 1px solid var(--fpv-inner-border);
+}
+.fpv-info {
+  display: grid;
+  grid-template-columns: 96px minmax(0, 1fr);
+  row-gap: 10px;
+  column-gap: 12px;
+  align-items: baseline;
+  font-size: 14px;
+}
+.fpv.is-narrow .fpv-info {
+  grid-template-columns: 84px minmax(0, 1fr);
+}
+.fpv-muted {
+  color: var(--fpv-p3);
+}
+.fpv-big {
+  font-size: 17px;
+  overflow-wrap: anywhere;
+}
+.fpv-ruler {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.fpv-ruler .fpv-legend {
+  column-gap: 18px;
+  row-gap: 6px;
+  font-size: 12px;
+  color: var(--fpv-p3);
+}
+.fpv-ruler .fpv-legend-item {
+  gap: 6px;
+}
+.fpv.is-narrow .fpv-ruler .fpv-legend {
+  flex-direction: row;
+}
+.fpv-cols {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+.fpv.is-narrow .fpv-cols {
+  grid-template-columns: minmax(0, 1fr);
+}
+.fpv-col {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.fpv-col-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+}
+.fpv-col-head > span {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+.fpv-code {
+  margin-top: -8px;
+  font-size: 12px;
+  color: var(--fpv-p3);
+  overflow-wrap: anywhere;
+}
+.fpv-step {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.fpv-step > div:first-child {
+  font-size: 13px;
+  color: var(--fpv-p3);
+}
+.fpv-step > div:last-child {
+  font-size: 18px;
+  overflow-wrap: anywhere;
+}
+.fpv-badge {
+  align-self: flex-start;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 14px;
+  background: var(--fpv-ok-a);
+  color: var(--fpv-ok);
+}
+.fpv-badge.is-bad {
+  background: var(--fpv-bad-a);
+  color: var(--fpv-bad);
+}
