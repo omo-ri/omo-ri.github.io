@@ -52,7 +52,7 @@ style:
     background-image: url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.13/image/sidebar-bg1@small.jpg)
   site: # 全站背景图，设了 background-image 之后 blur 才有效
     background-image: url(https://cdn.jsdmirror.com/gh/omo-ri/omo-ri.github.io/source/assets/images/background.jpg)
-    blur-px: 5px # 主题默认 100px
+    blur-px: 80px # 主题默认 100px
     blur-bg: var(--bg-a20) # 主题默认 var(--bg-a75)
     blur-sat: 100% # 主题默认 300%
 
